@@ -1,14 +1,13 @@
-// lib/main.dart
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
+import 'presentation/screens/home.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'firebase_options.dart';
 import 'data/providers/auth_provider.dart';
 import 'data/providers/quiz_provider.dart';
 import 'data/repositories/auth_repository.dart';
 import 'data/repositories/quiz_repository.dart';
-import 'presentation/screens/sign_in.dart';
-import 'presentation/screens/quiz_play.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,8 +18,12 @@ void main() async {
 
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => AuthProvider(authRepository)),
-      ChangeNotifierProvider(create: (_) => QuizProvider(quizRepository)),
+      ChangeNotifierProvider(
+        create: (_) => AuthProvider(authRepository),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => QuizProvider(quizRepository),
+      ),
     ],
     child: const MyApp(),
   ));
@@ -33,11 +36,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Quiz App',
-      home: Consumer<AuthProvider>(
-        builder: (context, auth, _) => auth.isLoggedIn
-            ? const QuizPlayScreen()
-            : const SignInScreen(),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: true,
       ),
+      home: const HomeScreen(),
     );
   }
 }
