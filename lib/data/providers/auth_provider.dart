@@ -8,7 +8,7 @@ class AuthProvider extends ChangeNotifier {
   Error? error;
 
   AuthProvider(this._repository) {
-    _repository.signOut(); // Déconnecte l'utilisateur au lancement (pour les tests)
+    //_repository.signOut(); // Déconnecte l'utilisateur au lancement (pour les tests)
     _repository.authStateChanges.listen(
             (_) => notifyListeners(),
         onError: (error) {
@@ -25,4 +25,8 @@ class AuthProvider extends ChangeNotifier {
   Future<void> signInWithGoogle() async {
     await _repository.signInWithGoogle();
   }
+
+ Future<void> signOut() async{
+    await _repository.signOut();
+ }
 }
