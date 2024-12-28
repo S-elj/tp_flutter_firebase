@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:tp_flutter_firebase/presentation/screens/sign_in.dart';
 import 'presentation/screens/home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +41,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: Consumer<AuthProvider>(
+        builder: (context, auth, _) {
+          return const HomeScreen();
+        },
+      ),
     );
   }
 }

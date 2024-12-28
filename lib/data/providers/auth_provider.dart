@@ -29,4 +29,16 @@ class AuthProvider extends ChangeNotifier {
  Future<void> signOut() async{
     await _repository.signOut();
  }
+  Future<void> signUpWithEmail(String email, String password) async {
+    await _repository.signUpWithEmail(email, password);
+  }
+
+  Future<void> signInWithEmail(String email, String password) async {
+    await _repository.signInWithEmail(email, password);
+  }
+
+
+  Future<void> resetPassword(String email) async {
+    await _repository.sendPasswordResetEmail(email);
+  }
 }
