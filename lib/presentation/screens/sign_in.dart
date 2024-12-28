@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tp_flutter_firebase/presentation/widget/auth_widgets.dart';
+import 'package:tp_flutter_firebase/presentation/widget/auth/sign_up_widgets.dart';
 import '../../data/providers/auth_provider.dart';
+import '../widget/auth/sign_in_widgets.dart';
 import 'home.dart';
 
 class SignInScreen extends StatefulWidget {
