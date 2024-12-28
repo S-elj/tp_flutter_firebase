@@ -63,70 +63,80 @@ class QuizCreateScreenState extends State<QuizCreateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          TextFormField(
-            controller: _nameController,
-            decoration: const InputDecoration(
-              labelText: 'Nom du quizz',
-              border: OutlineInputBorder(),
-            ),
-            validator: (value) {
-              if (value?.isEmpty ?? true) {
-                return 'Entrez un nom';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _imageController,
-            decoration: const InputDecoration(
-              labelText: 'Image URL (optionnel)',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Questions (${_questions.length})',
-                style: Theme.of(context).textTheme.titleMedium,
+    return Scaffold( // Ajout du Scaffold
+      appBar: AppBar(title: const Text('Créer un Quiz')), // Ajout d'une AppBar
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            TextFormField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: 'Nom du quizz',
+                border: OutlineInputBorder(),
               ),
-              ElevatedButton.icon(
-                onPressed: addQuestion,
-                icon: const Icon(Icons.add),
-                label: const Text('Ajouter une question'),
+              validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return 'Entrez un nom';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _imageController,
+              decoration: const InputDecoration(
+                labelText: 'Image URL (optionnel)',
+                border: OutlineInputBorder(),
               ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          ..._questions.asMap().entries.map((entry) {
-            final index = entry.key;
-            final question = entry.value;
-            return Card(
-              margin: const EdgeInsets.symmetric(vertical: 4),
-              child: ListTile(
-                title: Text(question.text),
-                subtitle: Text('Bonne réponse: ${question.isCorrect ? 'Vrai' : 'Faux'}'),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () {
-                    setState(() {
-                      _questions.removeAt(index);
-                    });
-                  },
+            ),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Questions (${_questions.length})',
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .titleMedium,
                 ),
-              ),
-            );
-          }),
-          const SizedBox(height: 8),
-          ElevatedButton(onPressed: save, child: const Text("Sauvegarder"))
-        ],
+                ElevatedButton.icon(
+                  onPressed: addQuestion,
+                  icon: const Icon(Icons.add),
+                  label: const Text('Ajouter une question'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            ..._questions
+                .asMap()
+                .entries
+                .map((entry) {
+              final index = entry.key;
+              final question = entry.value;
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 4),
+                child: ListTile(
+                  title: Text(question.text),
+                  subtitle: Text(
+                      'Bonne réponse: ${question.isCorrect ? 'Vrai' : 'Faux'}'),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      setState(() {
+                        _questions.removeAt(index);
+                      });
+                    },
+                  ),
+                ),
+              );
+            }),
+            const SizedBox(height: 8),
+            ElevatedButton(onPressed: save, child: const Text("Sauvegarder"))
+          ],
+        ),
       ),
     );
   }

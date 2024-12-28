@@ -14,6 +14,10 @@ class QuizPlayScreen extends StatelessWidget {
           return const Center(child: Text('Aucun quiz en cours.'));
         }
 
+        if (model.isQuizComplete()) {
+          return _buildResultScreen(context, model);
+        }
+
         final quiz = model.currentQuiz!;
         final currentQuestion = model.currentQuestion;
         final questionIndex = currentQuestion != null ?
@@ -76,6 +80,35 @@ class QuizPlayScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildResultScreen(BuildContext context, QuizProvider model) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Résultats')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Score: ${model.currentScore}/${model.answers.length}',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            Text(
+              '${model.getScorePercentage().toStringAsFixed(1)}%',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 32),
+            ElevatedButton(
+              onPressed: () {
+                model.endQuiz();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Terminer'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _answerQuestion(BuildContext context, QuizProvider model, bool answer) {
     final currentQuestion = model.currentQuestion;
     if (currentQuestion == null) return;
@@ -87,6 +120,8 @@ class QuizPlayScreen extends StatelessWidget {
         backgroundColor: isCorrect ? Colors.green : Colors.red,
       ),
     );
+
+    model.answerQuestion(answer);
   }
 
 }
