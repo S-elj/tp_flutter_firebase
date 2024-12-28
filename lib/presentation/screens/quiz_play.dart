@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../data/providers/quiz_provider.dart';
-
+import '../widget/quiz_play_widgets.dart';
 
 class QuizPlayScreen extends StatelessWidget {
   const QuizPlayScreen({super.key});
@@ -18,84 +18,74 @@ class QuizPlayScreen extends StatelessWidget {
           return _buildResultScreen(context, model);
         }
 
-        final quiz = model.currentQuiz!;
-        final currentQuestion = model.currentQuestion;
-        final questionIndex = currentQuestion != null ?
-        quiz.questions.indexOf(currentQuestion) : -1;
-
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(quiz.name),
-            actions: [
-              Text('${questionIndex + 1}/${quiz.questions.length}'),
-              const SizedBox(width: 16),
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                if (quiz.image.isNotEmpty)
-                  Image.network(
-                    quiz.image,
-                    height: 200,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                const SizedBox(height: 24),
-                if (currentQuestion != null) ...[
-                  Text(
-                    currentQuestion.text,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .headlineSmall,
-                    textAlign: TextAlign.center,
-                  ),
-                  const Spacer(),
-                  _buildAnswerButtons(context, model),
-                  const SizedBox(height: 32),
-                ],
-              ],
-            ),
-          ),
-        );
+        return _buildQuizScreen(context, model);
       },
     );
   }
 
-  Widget _buildAnswerButtons(BuildContext context, QuizProvider model) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        ElevatedButton(
-          onPressed: () => _answerQuestion(context, model, false),
-          child: const Text('Faux'),
+  Widget _buildQuizScreen(BuildContext context, QuizProvider model) {
+    final quiz = model.currentQuiz!;
+    final currentQuestion = model.currentQuestion;
+    final questionIndex = currentQuestion != null ?
+    quiz.questions.indexOf(currentQuestion) : -1;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(quiz.name),
+        actions: [
+          Text('${questionIndex + 1}/${quiz.questions.length}'),
+          const SizedBox(width: 16),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            if (quiz.image.isNotEmpty)
+              Image.network(
+                quiz.image,
+                height: 200,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            const SizedBox(height: 24),
+            if (currentQuestion != null) ...[
+              Text(
+                currentQuestion.text,
+                style: Theme.of(context).textTheme.headlineSmall,
+                textAlign: TextAlign.center,
+              ),
+              const Spacer(),
+              QuizAnswerButtons(
+                onAnswer: (answer) => _answerQuestion(context, model, answer),
+              ),
+              const SizedBox(height: 32),
+            ],
+          ],
         ),
-        ElevatedButton(
-          onPressed: () => _answerQuestion(context, model, true),
-          child: const Text('Vrai'),
-        ),
-      ],
+      ),
     );
   }
 
   Widget _buildResultScreen(BuildContext context, QuizProvider model) {
     return Scaffold(
       appBar: AppBar(title: const Text('Résultats')),
-      body: Center(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              'Score: ${model.currentScore}/${model.answers.length}',
-              style: Theme.of(context).textTheme.headlineMedium,
+            QuizScoreCard(
+              currentScore: model.currentScore,
+              totalQuestions: model.answers.length,
+              scorePercentage: model.getScorePercentage(),
             ),
-            Text(
-              '${model.getScorePercentage().toStringAsFixed(1)}%',
-              style: Theme.of(context).textTheme.headlineSmall,
+            const SizedBox(height: 24),
+            QuizAnswerRecap(
+              questions: model.currentQuiz!.questions,
+              answers: model.answers,
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 model.endQuiz();
@@ -113,9 +103,12 @@ class QuizPlayScreen extends StatelessWidget {
     final currentQuestion = model.currentQuestion;
     if (currentQuestion == null) return;
 
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
     final isCorrect = currentQuestion.isCorrect == answer;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        duration: const Duration(milliseconds: 500),
         content: Text(isCorrect ? 'Correcte !' : 'Mauvaise réponse !'),
         backgroundColor: isCorrect ? Colors.green : Colors.red,
       ),
@@ -123,5 +116,4 @@ class QuizPlayScreen extends StatelessWidget {
 
     model.answerQuestion(answer);
   }
-
 }

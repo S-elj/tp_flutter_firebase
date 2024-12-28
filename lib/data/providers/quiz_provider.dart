@@ -54,11 +54,12 @@ class QuizProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void endQuiz() {
+  Future<void> endQuiz() async {
     currentQuiz = null;
     currentQuestion = null;
     _game.endGame();
-    notifyListeners();
+
+    await updateQuizList();
   }
 
   void answerQuestion(bool answer) {

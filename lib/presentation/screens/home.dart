@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../data/providers/auth_provider.dart';
 import '../../data/providers/quiz_provider.dart';
-import '../widget/home_widget.dart';
+import '../widget/home_widgets.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
