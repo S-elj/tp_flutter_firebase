@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tp_flutter_firebase/presentation/screens/profile.dart';
+
 import '../../data/providers/auth_provider.dart';
 import '../../data/providers/quiz_provider.dart';
 import '../widget/home_widgets.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -29,10 +32,22 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           Consumer<AuthProvider>(
             builder: (context, auth, _) => auth.isLoggedIn
-                ? IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: () => auth.signOut(),
-            )
+                ? Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.account_circle),
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const ProfileScreen(),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.logout),
+                        onPressed: () => auth.signOut(),
+                      ),
+                    ],
+                  )
                 : const SizedBox(),
           ),
         ],
@@ -44,6 +59,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-
 }

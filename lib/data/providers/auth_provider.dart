@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tp_flutter_firebase/data/repositories/auth_repository.dart';
 
@@ -15,6 +16,8 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
     });
   }
+
+  User? get currentUser => _repository.currentUser;
 
   bool get isLoggedIn {
     print("Current user: ${_repository.currentUser}");
