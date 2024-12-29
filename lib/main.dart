@@ -1,14 +1,14 @@
-
-import 'package:flutter/material.dart';
-import 'package:tp_flutter_firebase/presentation/screens/sign_in.dart';
-import 'presentation/screens/home.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'data/providers/audio_provider.dart';
 import 'data/providers/auth_provider.dart';
 import 'data/providers/quiz_provider.dart';
 import 'data/repositories/auth_repository.dart';
 import 'data/repositories/quiz_repository.dart';
 import 'firebase_options.dart';
+import 'presentation/screens/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +16,9 @@ void main() async {
 
   final authRepository = AuthRepository();
   final quizRepository = QuizRepository();
+
+  final audioProvider = AudioProvider();
+  await audioProvider.initializeAudio();
 
   runApp(MultiProvider(
     providers: [
@@ -25,6 +28,7 @@ void main() async {
       ChangeNotifierProvider(
         create: (_) => QuizProvider(quizRepository),
       ),
+      Provider.value(value: audioProvider),
     ],
     child: const MyApp(),
   ));

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:tp_flutter_firebase/data/models/quiz_model.dart';
 import 'package:tp_flutter_firebase/data/repositories/quiz_repository.dart';
-import '../../business_logic/blocs/quiz_game.dart';
 
+import '../../business_logic/blocs/quiz_game.dart';
 
 class QuizProvider extends ChangeNotifier {
   final QuizRepository _repository;
@@ -66,9 +65,16 @@ class QuizProvider extends ChangeNotifier {
     if (currentQuestion == null) return;
 
     _game.answerQuestion(answer, currentQuestion!.isCorrect);
-    moveToNextQuestion();
-    notifyListeners();
+    if (!moveToNextQuestion()) {
+      // Si le quiz est terminé, attendre 1 seconde avant de notifier
+      Future.delayed(const Duration(seconds: 1), () {
+        notifyListeners(); // Déclenche la mise à jour pour afficher l'écran des résultats
+      });
+    } else {
+      notifyListeners();
+    }
   }
+
   bool moveToNextQuestion() {
     if (currentQuiz == null || currentQuestion == null) return false;
 
@@ -81,13 +87,8 @@ class QuizProvider extends ChangeNotifier {
     return false;
   }
 
-
-
-
   bool isQuizComplete() {
     return currentQuiz != null &&
         _game.isComplete(currentQuiz!.questions.length);
   }
-
-
 }

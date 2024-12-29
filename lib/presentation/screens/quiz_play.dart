@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../data/providers/audio_provider.dart';
 import '../../data/providers/quiz_provider.dart';
 import '../widget/quiz_play_widgets.dart';
 
@@ -26,8 +28,8 @@ class QuizPlayScreen extends StatelessWidget {
   Widget _buildQuizScreen(BuildContext context, QuizProvider model) {
     final quiz = model.currentQuiz!;
     final currentQuestion = model.currentQuestion;
-    final questionIndex = currentQuestion != null ?
-    quiz.questions.indexOf(currentQuestion) : -1;
+    final questionIndex =
+        currentQuestion != null ? quiz.questions.indexOf(currentQuestion) : -1;
 
     return Scaffold(
       appBar: AppBar(
@@ -68,6 +70,13 @@ class QuizPlayScreen extends StatelessWidget {
   }
 
   Widget _buildResultScreen(BuildContext context, QuizProvider model) {
+    //Son de victoire / defaite
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context
+          .read<AudioProvider>()
+          .playQuizCompletionSound(model.getScorePercentage());
+    });
+
     return Scaffold(
       appBar: AppBar(title: const Text('Résultats')),
       body: SingleChildScrollView(
@@ -106,6 +115,14 @@ class QuizPlayScreen extends StatelessWidget {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
     final isCorrect = currentQuestion.isCorrect == answer;
+
+    // Jouer le son de réponse
+    if (isCorrect) {
+      context.read<AudioProvider>().playCorrectAnswerSound();
+    } else {
+      context.read<AudioProvider>().playWrongAnswerSound();
+    }
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(milliseconds: 500),

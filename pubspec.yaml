@@ -35,16 +35,33 @@ dependencies:
   firebase_storage: ^12.3.7
   cloud_firestore: ^5.6.0
   provider: ^6.1.1
-  #file_picker: ^8.1.7
   path: ^1.9.0
+  hl_image_picker: ^1.2.16
+  soundpool: ^2.4.1
 
+
+
+
+  #dependences qui font crash  le build :
+  #file_picker: ^8.1.7
   #google_sign_in: ^6.2.2
+  #just_audio: ^0.9.42
+  #audioplayers: ^6.1.0
+  #just_audio: ^0.9.42
+  #simple_audio: ^2.0.1
+  #simple_audio_fork: ^1.0.0
+  #flutter_soloud: ^2.1.7
+  #audio_plus: ^1.0.3
+  #kplayer: ^0.4.2
+  #mp3_player: ^0.2.1
+  #simple_audio_player: ^1.0.2
+
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   flutter_hooks: ^0.20.5
-  hl_image_picker: ^1.2.16
 
 dev_dependencies:
   flutter_test:
