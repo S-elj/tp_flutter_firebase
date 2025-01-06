@@ -7,7 +7,6 @@ Ce projet Flutter utilise **Firebase** pour gérer l'authentification et les don
 - **Authentification Firebase** : Connexion et inscription avec Firebase Authentication.
 - **Base de données Firestore** : Stockage et récupération de données utilisateur.
 - **Stockage Firebase** : Upload et gestion de fichiers dans Firebase Storage.
-- **Notifications Push** : Implémentation de Firebase Cloud Messaging (FCM).
 
 ---
 
